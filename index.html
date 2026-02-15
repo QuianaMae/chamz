@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: Lessons 5-8 Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --lesson5-color: #667eea;
+            --lesson6-color: #764ba2;
+            --lesson7-color: #f093fb;
+            --lesson8-color: #4facfe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--lesson5-color), var(--lesson6-color), var(--lesson7-color), var(--lesson8-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: var(--secondary-color);
+            transform: scale(1.3);
+            border-color: #fff;
+        }
+
+        /* Slides Container */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Lesson-specific backgrounds */
+        .slide[data-lesson="5"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .slide[data-lesson="6"] {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .slide[data-lesson="7"] {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .slide[data-lesson="8"] {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .slide[data-lesson="title"] {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        /* Slide Content Card */
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .slide h1, .slide h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide h2 {
+            font-size: 1.8em;
+            color: #fff;
+        }
+
+        .slide h3 {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 20px 0 10px;
+            font-size: 1.3em;
+        }
+
+        .slide p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .slide ul, .slide ol {
+            padding-left: 25px;
+            text-align: left;
+        }
+
+        .slide li {
+            font-size: 1.05em;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeInLeft 0.5s ease forwards;
+        }
+
+        .slide li:nth-child(1) { animation-delay: 0.1s; }
+        .slide li:nth-child(2) { animation-delay: 0.2s; }
+        .slide li:nth-child(3) { animation-delay: 0.3s; }
+        .slide li:nth-child(4) { animation-delay: 0.4s; }
+        .slide li:nth-child(5) { animation-delay: 0.5s; }
+        .slide li:nth-child(6) { animation-delay: 0.6s; }
+        .slide li:nth-child(7) { animation-delay: 0.7s; }
+        .slide li:nth-child(8) { animation-delay: 0.8s; }
+        .slide li:nth-child(9) { animation-delay: 0.9s; }
+        .slide li:nth-child(10) { animation-delay: 1s; }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .graph-description {
+            font-style: italic;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+
+        /* Navigation Buttons */
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .navigation button {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation button:hover {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .navigation button:active {
+            transform: translateY(0);
+        }
+
+        /* Keyboard Hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            z-index: 1000;
+        }
+
+        /* Decorative Elements */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating Shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Transition Effects */
+        .slide.active .slide-content {
+            animation: scaleIn 0.6s ease forwards;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .slide-content {
+                padding: 25px;
+                margin: 10px;
+            }
+
+            .slide h1 {
+                font-size: 1.8em;
+            }
+
+            .slide h2 {
+                font-size: 1.4em;
+            }
+
+            .nav-dots {
+                display: none;
+            }
+
+            .slide li, .slide p {
+                font-size: 0.95em;
+            }
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* Numbered Items */
+        .slide ol li {
+            list-style-type: none;
+            counter-increment: item;
+        }
+
+        .slide ol li::before {
+            content: counter(item) ".";
+            font-weight: bold;
+            margin-right: 10px;
+            color: var(--warning-color);
+        }
+
+        /* Two Column Layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .column {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .column h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">27</span>
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" id="navDots"></div>
+
+    <!-- Navigation Buttons -->
+    <div class="navigation">
+        <button onclick="prevSlide()">← Previous</button>
+        <button onclick="nextSlide()">Next →</button>
+    </div>
+
+    <!-- Lesson 5 Slides -->
+    <div class="slide" id="slide1" data-lesson="title">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="slide-content">
+            <h1>Chapter 4: Business Planning and Management</h1>
+            <h2>Lessons 5, 6, 7, and 8</h2>
+        </div>
+    </div>
+
+    <div class="slide" id="slide2" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Lesson 5 - Topic: Developing the Business Plan</h2>
+            <p>A business plan is a roadmap that guides the future of a business. It helps in making daily decisions and planning for growth, expansion, and improvements. Usually written by the owner with help from family or team members, a business plan is a "living" document that should be reviewed and updated regularly. Reviewing it helps check if the business is meeting goals or needs changes.</p>
+        </div>
+    </div>
+
+    <div class="slide" id="slide3" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Business Planning</h2>
+            <p>Business planning should be realistic, meaning it must be based on available resources and the needs of the community. If not, it becomes just a dream, and many projects fail because their goals do not match their resources.</p>
+        </div>
+    </div>
+
+    <div class="slide" id="slide4" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Principles of Planning</h2>
+            <ul>
+                <li>Planning must be realistic – Plans should match the available human, financial, and physical resources to succeed.</li>
+                <li>Planning must be based on felt needs – Business goals should meet the needs of the community, which can be identified through observation, interviews, and surveys.</li>
+                <li>Planning must be flexible – Plans should be adjusted when resources, government policies, or consumer preferences change.</li>
+                <li>Planning must start with simple projects – Beginners or those with limited resources should start with small business.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide5" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Stages of Business Planning</h2>
+            <ul>
+                <li>Unplanned Stage – The owner focuses only on daily operations and survival.</li>
+                <li>Budgeting-System Stage – The owner starts preparing budgets by estimating income and expenses to manage the business better.</li>
+                <li>Annual Planning Stage – The owner creates a yearly plan.</li>
+                <li>Strategic Planning Stage – The business makes a long-term plan (3–5 years) that can adjust to changes as the company grows.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide6" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Components of Business Planning</h2>
+            <ul>
+                <li>SWOT – Analyze the strengths, weaknesses, opportunities, and threats of a product or service to improve it and stay competitive.</li>
+                <li>Objectives – Set clear and realistic goals (daily to yearly)</li>
+                <li>Strategies – Plan specific actions in finance, production, marketing, and organization to achieve the objectives.</li>
+                <li>Time Frame – Manage time properly by setting schedules for each business activity.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide7" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>The Importance of Business Planning</h2>
+            <ul>
+                <li>Planning reduces business risks – It studies the entrepreneur's skills and resources, consumer needs, and competitors to avoid problems.</li>
+                <li>Planning lowers production costs – Resources like money, materials, machines, and workers are used efficiently and properly scheduled.</li>
+                <li>Planning finds business weaknesses – It sets goals and creates strategies, helping identify areas that need improvement.</li>
+                <li>Planning needs accurate information – Good planning depends on reliable data about customers and competitors.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide8" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Describe the Scope and Value of a Business Plan</h2>
+            <p>Three perspectives should be considered in preparing the plan:</p>
+            <ul>
+                <li>Entrepreneur's Perspective – the entrepreneurs must be able to clearly articulate what the venture is all about.</li>
+                <li>Marketing Perspective – entrepreneurs must try to view their business through the eyes of their customer.</li>
+                <li>Investor's Perspective – entrepreneurs should try to view their business through the eyes of their investors.</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>The business plan is valuable because it:</strong>
+                <ul>
+                    <li>Helps determine the viability of the venture in a designated market.</li>
+                    <li>Guides the entrepreneur in organizing planning activities.</li>
+                    <li>Serves as an important tool in obtaining financing.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide9" data-lesson="5">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Information Needs and Sources for the Business Plan</h2>
+            <div class="two-columns">
+                <div class="column">
+                    <h3>Internal Information</h3>
+                    <p>Businesses should first use their own data about employees, sales, and customers to understand performance, satisfaction, and product demand.</p>
+                </div>
+                <div class="column">
+                    <h3>External Sources</h3>
+                    <p>Industry associations, government websites, and market research provide important trends and regulatory information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson 6 Slides -->
+    <div class="slide" id="slide10" data-lesson="6">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Lesson 6 - Topic: Marketing Your Business</h2>
+            <p>Marketing for small business means attracting and retaining customers. It is defined as the process by which a company promotes, sells and distributes a product or service.</p>
+            <div class="highlight-box">
+                <strong>Marketing is about communicating key aspects of your business to your customers, including:</strong>
+                <ol>
+                    <li>Information about your company, products and services</li>
+                    <li>What makes your business unique</li>
+                    <li>What customer need you are addressing and why they should buy from you</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide11" data-lesson="6">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Four P's of Marketing</h2>
+            <p>When deciding on the most effective way to market your business, it is often helpful to analyze four key factors that influence the purchase decision. These factors are known as the four P's of marketing:</p>
+            <div class="two-columns">
+                <div class="column">
+                    <h3>Product</h3>
+                    <p>What are you planning to sell?</p>
+                    <h3>Price</h3>
+                    <p>How much are you going to charge for your product?</p>
+                </div>
+                <div class="column">
+                    <h3>Place</h3>
+                    <p>Where are people going to buy your product?</p>
+                    <h3>Promotion</h3>
+                    <p>How are people going to find out about your product?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide12" data-lesson="6">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Steps in Market Research for a New Venture</h2>
+            <ol>
+                <li>Define The Problem</li>
+                <li>Develop Your Research Plan</li>
+                <li>Collect Relevant Data and Information</li>
+                <li>Analyze Data and Report Findings</li>
+                <li>Take Action</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="slide" id="slide13" data-lesson="6">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Importance of Marketing Planning</h2>
+            <ul>
+                <li>It helps in avoiding future uncertainties.</li>
+                <li>It helps in management by objectives.</li>
+                <li>It helps in achieving objectives.</li>
+                <li>It helps in coordination and communication among the departments</li>
+                <li>It helps in control</li>
+                <li>It helps the customers in getting full satisfaction</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide14" data-lesson="6">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Benefits of Marketing Planning</h2>
+            <ul>
+                <li>Marketing planning promotes successful marketing operations.</li>
+                <li>Planning helps to co-ordinate activities which can facilitate the attainment of objectives over time.</li>
+                <li>It forces management to reflect upon the future in a systematic way.</li>
+                <li>Resources can be better balanced in relation to identified market opportunities.</li>
+                <li>A plan provides a framework for a continuing review of operations.</li>
+                <li>Marketing planning helps to appraise performance and capitalize on strengths.</li>
+                <li>Planning can be advocated to minimize the risk of failure.</li>
+                <li>Marketing planning reduces adverse consequences of unfavorable circumstances.</li>
+                <li>A marketing plan promotes a comprehensive view of the business firm.</li>
+                <li>A greater preparedness to accommodate change can be stimulated.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide15" data-lesson="6">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Marketing Strategy</h2>
+            <div class="highlight-box">
+                <p><strong>Marketing Strategy</strong> - the marketing logic by which the business unit hopes to achieve its marketing objectives.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson 7 Slides -->
+    <div class="slide" id="slide16" data-lesson="7">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Lesson 7 - Topic: Designing Your Organization</h2>
+            <p>Jay Galbraith and Amy Kate provide the compass, chart, essential tools and supplies for the journey to organization effectiveness in dynamic times. Designing your organization, brought forth at a time of major challenge to global business and national priorities, brings contemporary organization decision into focus and provides clear advice to achieve business performance today and tomorrow.</p>
+        </div>
+    </div>
+
+    <div class="slide" id="slide17" data-lesson="7">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Designing Your Organization</h2>
+            <ul>
+                <li>Designing around the customer</li>
+                <li>Organizing across borders</li>
+                <li>Making a matrix work</li>
+                <li>Solving the centralization and decentralization dilemma</li>
+                <li>Organizing for innovation</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide18" data-lesson="7">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>The Different Basic Legal Forms of Business Formation</h2>
+            <p>All business must adopt some legal configuration that defines the rights and liabilities of participants in the business, OWNERSHIP, CONTROL, PERSONAL LIABILITY, LIFE SPAN, and FINANCIAL STRUCTURE.</p>
+            <div class="highlight-box">
+                <strong>The basic legal forms of organization includes:</strong>
+                <ul>
+                    <li>Sole Proprietorship</li>
+                    <li>Partnership</li>
+                    <li>Corporation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide19" data-lesson="7">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Sole Proprietorship</h2>
+            <div class="two-columns">
+                <div class="column">
+                    <h3>ADVANTAGES</h3>
+                    <ul>
+                        <li>Easy to established</li>
+                        <li>Full control over all business decision</li>
+                        <li>Owners keep all profit</li>
+                        <li>The business is easy to dissolve, if desired</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>DISADVANTAGES</h3>
+                    <ul>
+                        <li>It can be difficult to raise funds for the business</li>
+                        <li>Responsible for every aspect of the business</li>
+                        <li>Unlimited liability - personally liable for business debt</li>
+                        <li>Limited skills and knowledge</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide20" data-lesson="7">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Partnership</h2>
+            <h3>ADVANTAGES OF PARTNERSHIP:</h3>
+            <ul>
+                <li>Easy to established</li>
+                <li>Multiple sources of capital</li>
+                <li>Risks are spread among partners</li>
+                <li>Minimal government regulation</li>
+            </ul>
+            <h3>DISADVANTAGES OF PARTNERSHIP:</h3>
+            <ul>
+                <li>Partners are jointly and individually liable for the actions of the other partners</li>
+                <li>Profits must be shared with others</li>
+                <li>Since decisions are shared, disagreements can occur</li>
+                <li>The partnership may have a limited life</li>
+            </ul>
+            <h3>TYPES OF PARTNERSHIP:</h3>
+            <ul>
+                <li>General partnership</li>
+                <li>Limited partnership</li>
+                <li>Joint venture</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide21" data-lesson="7">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Corporations</h2>
+            <h3>ADVANTAGES OF A CORPORATION:</h3>
+            <ul>
+                <li>Corporations can raise additional funds through the sale of stocks.</li>
+                <li>A corporation may deduct the cost of benefits it provides to officers and employees</li>
+            </ul>
+            <h3>DISADVANTAGES OF CORPORATIONS:</h3>
+            <ul>
+                <li>The process of incorporation requires more time and money than other forms of organization</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Lesson 8 Slides -->
+    <div class="slide" id="slide22" data-lesson="title">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="slide-content">
+            <h1>Lesson 8: Financing and Accounting</h1>
+            <p style="text-align: center;">Presenter/Author: [Your Name or Placeholder]</p>
+            <p style="text-align: center;">Date: [Insert Date]</p>
+        </div>
+    </div>
+
+    <div class="slide" id="slide23" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Lesson 8 - Topic: Financing and Accounting</h2>
+            <p>There are many similarities between accounting and finance, they are two distinct disciplines. The main difference between them is that those who work in finance typically focus on planning and directing the financial transactions for an organization, while those who work in accounting focus on recording and reporting on those transactions.</p>
+            <div class="highlight-box">
+                <strong>Put another way:</strong> Accounting is the organization and management of financial information, whereas finance is the management of money.
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide24" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>What is Finance?</h2>
+            <p>Finance is a broad term associated with managing money and acquiring needed funds, including budgeting, forecasting, lending, saving, investing and borrowing. According to Investopedia, the finance industry consists of three sub-categories:</p>
+            <ul>
+                <li><strong>Personal finance</strong> involves financial planning for individuals including long-term financial management plans, such as retirement, purchasing of financial products, such as mortgages, and banking.</li>
+                <li><strong>Corporate finance</strong> involves the financial activities for running an organization, which can include investment strategy and budgeting.</li>
+                <li><strong>Public (government) finance</strong> includes the tax, spending, budgeting and other policies that relate to how the government allocates resources.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide25" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>What is Accounting?</h2>
+            <p>Accounting is the identifying, recording and communicating of an organization's economic results. A vital function for any business, accounting measures business activities, processes the information into reports and communicates the results to decision-makers.</p>
+            <div class="two-columns">
+                <div class="column">
+                    <h3>Financial Accounting</h3>
+                    <p>Generation of financial statements for external decision-makers.</p>
+                </div>
+                <div class="column">
+                    <h3>Managerial Accounting</h3>
+                    <p>Used by internal stakeholders for business decisions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide26" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Role of Budgets</h2>
+            <p>Various management tools are used by businesses to ensure that their business functions run smoothly. Budgets are one of the most common financial tools that are used by businesses to manage their finances.</p>
+            <div class="highlight-box">
+                <strong>A budget</strong> is created with advanced forecasting tools and is useful in predicting your future expenses. Companies heavily rely on the accuracy of their budget because most of their key decisions are based on it.
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide27" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Types of Budgets</h2>
+            <div class="two-columns">
+                <div class="column">
+                    <h3>Departmental Budgets</h3>
+                    <p>Used to manage the finances of a specific department. For example, a company may have a marketing budget that is used to manage the expenses of the marketing department.</p>
+                </div>
+                <div class="column">
+                    <h3>Company Budgets</h3>
+                    <p>Used to manage the finances of the entire company. This type of budget is typically created by the finance department and is used to manage the overall financial health of the company.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide28" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Role of Budgets - Detailed Functions</h2>
+            <ul>
+                <li>To aid the planning of the organization in a systematic and logical manner that adheres to the long term strategy</li>
+                <li>It determines direction</li>
+                <li>It allocates resources</li>
+                <li>It promotes forward thinking</li>
+                <li>It turns strategic objectives into practical reality</li>
+                <li>It communicates objectives, opportunities and plans to various managers</li>
+                <li>It assigns responsibilities</li>
+                <li>It delegates without loss of control</li>
+                <li>It provides motivation for managers to achieve goals</li>
+                <li>To establish targets and standards which employees are motivated to achieve</li>
+                <li>To evaluate performance against the budget</li>
+                <li>To provide a framework for evaluating the performance of managers in meeting individual and department targets</li>
+                <li>To control activities by measuring progress against the original plan, making adjustments where necessary</li>
+                <li>To control income and expenditure</li>
+                <li>To facilitate management by exception</li>
+                <li>To take remedial action when there is deviation from the plan</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide29" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>The Break-Even Analysis</h2>
+            <p>Break-even analysis compares total revenues (TR) with total cost (TC). TR represents income while TC represents expense of the enterprise.</p>
+            <ul>
+                <li>When TR is greater than TC, there is <strong>profit</strong>.</li>
+                <li>When TC is greater than TR, it means <strong>loss</strong>.</li>
+                <li>When TR equals TC, it is <strong>break-even</strong> - there is no profit and no loss.</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>Break-even analysis</strong> is widely used by economists in solving managerial problems. Government agencies and other organizations depend on break-even analysis in projecting their revenues, costs and profits.
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide30" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Break-Even Formulas</h2>
+            <h3>Break-Even Point Sales Volumes (BEPSV)</h3>
+            <div class="formula">
+                BEPSV = FC / (USP - UVC)
+            </div>
+            <p>Where:</p>
+            <ul>
+                <li><strong>FC</strong> = Fixed Cost</li>
+                <li><strong>USP</strong> = Unit Selling Price</li>
+                <li><strong>UVC</strong> = Unit Variable Cost</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>Example:</strong> FC = P100,000, USP = P10, UVC = P5<br>
+                BEPSV = P100,000 / (P10 - P5) = P100,000 / P5 = <strong>20,000 units</strong>
+            </div>
+            <h3 style="margin-top: 20px;">Break-Even Point Selling Price (BEPSP)</h3>
+            <div class="formula">
+                BEPSP = (FC + VC) / Q
+            </div>
+            <p>Where:</p>
+            <ul>
+                <li><strong>FC</strong> = Fixed Cost</li>
+                <li><strong>VC</strong> = Variable Cost</li>
+                <li><strong>Q</strong> = Quantity</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>Example:</strong> FC = P100,000, VC = P20,000, Q = 30,000<br>
+                BEPSP = (P100,000 + P20,000) / 30,000 = P120,000 / 30,000 = <strong>P4 per unit</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide31" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>Break-Even Graph</h2>
+            <p>A break-even graph assumes that the average variable cost (AVC) is constant, making total cost (TC) a straight line. AVC is derived by dividing total variable cost (TVC) with the number of output.</p>
+            <div class="highlight-box">
+                <strong>Key Assumptions:</strong>
+                <ul>
+                    <li>AVC is constant - therefore, TC is a straight line</li>
+                    <li>Price of the enterprise is not affected by the number of output it sells</li>
+                    <li>TR is a straight line (TR = Price × Quantity)</li>
+                </ul>
+            </div>
+            <h3>Understanding the Graph:</h3>
+            <ul>
+                <li>The <strong>break-even point</strong> is where TR intersects TC</li>
+                <li>Below the break-even point: <strong>Loss</strong> (TC > TR)</li>
+                <li>Above the break-even point: <strong>Profit</strong> (TR > TC)</li>
+                <li>Profit is maximized at the point where the difference between TR and TC is greatest</li>
+            </ul>
+            <p class="graph-description">The graph shows that if the enterprise can only sell below 50 units, it incurs a loss because TC is greater than TR. The enterprise must sell more than 50 units to make a profit.</p>
+        </div>
+    </div>
+
+    <div class="slide" id="slide32" data-lesson="8">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="slide-content">
+            <h2>The Financial Plan</h2>
+            <p>A financial plan is a comprehensive evaluation of an individual's or organization's current financial state and future financial state by using current known variables to predict future income, asset values and withdrawal plans.</p>
+            <div class="highlight-box">
+                <strong>Components of a Financial Plan:</strong>
+                <ul>
+                    <li><strong>Budget</strong> - organizes finances and includes steps for spending and saving</li>
+                    <li><strong>Risk Management</strong> - insurance and emergency funds</li>
+                    <li><strong>Estate Planning</strong> - wealth transfer</li>
+                    <li><strong>Retirement Planning</strong> - long-term financial security</li>
+                </ul>
+            </div>
+            <h3>Types of Financial Statements:</h3>
+            <ul>
+                <li><strong>Balance Sheet</strong> - shows assets, liabilities, and equity</li>
+                <li><strong>Income Statement</strong> - shows revenues and expenses</li>
+                <li><strong>Cash Flow Statement</strong> - shows cash inflows and outflows</li>
+            </ul>
+            <h3>Prospective Financial Statements:</h3>
+            <p>These are time period-type financial statements that may reflect the current/future financial status of a company:</p>
+            <ul>
+                <li><strong>Forecasts</strong> - based on management's expected financial position</li>
+                <li><strong>Projections</strong> - "what-if" scenarios based on hypothetical assumptions</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Slide Navigation
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 1;
+
+        // Initialize
+        document.getElementById('totalSlides').textContent = totalSlides;
+        
+        // Create Navigation Dots
+        const navDotsContainer = document.getElementById('navDots');
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('nav-dot');
+            dot.addEventListener('click', () => goToSlide(index + 1));
+            navDotsContainer.appendChild(dot);
+        });
+
+        const navDots = document.querySelectorAll('.nav-dot');
+        
+        function updateUI() {
+            // Update slide counter
+            document.getElementById('currentSlide').textContent = currentSlide;
+            
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Update navigation dots
+            navDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === currentSlide);
+            });
+
+            // Update active class on slides
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index + 1 === currentSlide);
+            });
+        }
+
+        function goToSlide(n) {
+            if (n < 1) n = 1;
+            if (n > totalSlides) n = totalSlides;
+            currentSlide = n;
+            document.getElementById('slide' + currentSlide).scrollIntoView({ behavior: 'smooth' });
+            updateUI();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Scroll Detection
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollPos = window.scrollY + window.innerHeight / 2;
+                slides.forEach((slide, index) => {
+                    const slideTop = slide.offsetTop;
+                    const slideHeight = slide.offsetHeight;
+                    if (scrollPos >= slideTop && scrollPos < slideTop + slideHeight) {
+                        currentSlide = index + 1;
+                        updateUI();
+                    }
+                });
+            }, 50);
+        });
+
+        // Initial UI update
+        updateUI();
+    </script>
+</body>
+</html>
